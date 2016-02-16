@@ -1,0 +1,11 @@
+commit 196c746219aeca14ea91df3c14f9983665640942
+Author: MolchanS <molchanssda@gmail.com>
+Date:   Tue Feb 16 23:35:54 2016 +0300
+
+    [Lab1.2] First commit
+
+commit 06d368ef4e0dcfdd3ae16130c7035f70d8974eef
+Author: MolchanS <molchanssda@gmail.com>
+Date:   Tue Feb 16 23:29:54 2016 +0300
+
+    Add .gitignore and status.txt
