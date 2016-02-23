@@ -1,23 +1,21 @@
 import java.util.Date;
 
-/**
- * Created by black on 16.02.2016.
- */
+
 public class Message {
     private String id;
     private String message;
     private String author;
     private Date timestamp;
 
+    public Message() {
+    }
 
-    public Message(String _id,String _message, String _author, long _timestamp){
-        this.id=new String(_id);
-        this.message= new String(_message);
-        this.author = new String(_author);
+    public Message(String _id, String _message, String _author, long _timestamp){
+        this.id=_id;
+        this.message= _message;
+        this.author = _author;
         this.timestamp = new Date(_timestamp);
     }
-    public Message(){}
-
     public String getId(){
         return id;
     }
@@ -34,15 +32,11 @@ public class Message {
     @Override
     public String toString(){
         StringBuilder sb = new StringBuilder();
-        sb.append("{\"id\":\"");
-        sb.append(id);
-        sb.append("\",\"author\":\"");
         sb.append(author);
-        sb.append("\",\"timestamp\":");
+        sb.append("(");
         sb.append(timestamp);
-        sb.append(".\"message\":\"");
+        sb.append("):\n");
         sb.append(message);
-        sb.append("\"}");
         return new String(sb);
     }
 

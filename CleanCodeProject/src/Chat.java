@@ -1,27 +1,21 @@
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-/**
- * Created by black on 16.02.2016.
- */
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class Chat {
     List<Message> chat;
     public static final File MESSAGE_STORAGE = new File("chatLog.json");
 
     public Chat() {
-        this.chat = new ArrayList<Message>();
+        this.chat = new ArrayList<>();
     }
 
     public void readChat() throws IOException {
@@ -36,7 +30,7 @@ public class Chat {
 
     public void writeChat() throws IOException {
         ObjectMapper mapper = new ObjectMapper();
-           mapper.writeValue(MESSAGE_STORAGE, chat);
+        mapper.writeValue(MESSAGE_STORAGE, chat);
 
 
     }
@@ -51,18 +45,22 @@ public class Chat {
         msg = sc.nextLine();
         System.out.println("author");
         author = sc.nextLine();
-        time =System.currentTimeMillis();
+        time = System.currentTimeMillis();
         chat.add(new Message(id, msg, author, time));
         writeChat();
 
 
     }
 
-    public void sortChatChrono() {
+    public void sortChatChrono() throws IOException {
         Collections.sort(chat, new ComparatorChrono());
+        writeChat();
+        for (Message item : chat) {
+            System.out.println(item);
+        }
     }
 
-    public void deleteMsg() throws IOException{
+    public void deleteMsg() throws IOException {
         String id;
         System.out.println("Enter id");
         Scanner sc = new Scanner(System.in);
@@ -80,15 +78,11 @@ public class Chat {
     public void menu() throws IOException {
         System.out.println("What would you like to do?");
         System.out.println("1.Load chat log");
-        System.out.println("2.Write chat log");
-        System.out.println("3.Add entry");
-        System.out.println("4.Delete entry");
-        System.out.println("5.Find id");
-        System.out.println("6.Find author");
-        System.out.println("7.Find key word");
-        System.out.println("8.Find by time");
-        System.out.println("9.Find by pattern");
-        System.out.println("10.Exit");
+        System.out.println("2.Add entry");
+        System.out.println("3.Delete entry");
+        System.out.println("4.Search");
+        System.out.println("5.View chronologically");
+        System.out.println("6.Exit");
         Scanner s = new Scanner(System.in);
         int i = Integer.parseInt((s.nextLine()));
         switch (i) {
@@ -97,32 +91,18 @@ public class Chat {
                 readChat();
                 break;
             case 2:
-
-                writeChat();
-
-                break;
-            case 3:
                 addMessage();
                 break;
-            case 4:
+            case 3:
                 deleteMsg();
                 break;
+            case 4:
+                searchMenu();
+                break;
             case 5:
-                findId();
+                sortChatChrono();
                 break;
             case 6:
-                findAuthor();
-                break;
-            case 7:
-                findKeyword();
-                break;
-            case 8:
-                findTimeWindow();
-                break;
-            case 9:
-                findPattern();
-                break;
-            case 10:
                 System.exit(0);
 
             default:
@@ -134,14 +114,58 @@ public class Chat {
         menu();
     }
 
+    public void searchMenu() {
+        System.out.println("Search by");
+        System.out.println("1.id");
+        System.out.println("2.author");
+        System.out.println("3.keyword");
+        System.out.println("4.pattern");
+        System.out.println("5.time period");
+        System.out.println("6.Exit to Menu");
+        System.out.println("6.Exit");
+        Scanner s = new Scanner(System.in);
+        int i = Integer.parseInt((s.nextLine()));
+        switch (i) {
+            case 1:
+
+                findId();
+                break;
+            case 2:
+                findAuthor();
+                break;
+            case 3:
+                findKeyword();
+                break;
+            case 4:
+                findPattern();
+                break;
+            case 5:
+                findTimeWindow();
+                break;
+            case 6:
+                try {
+                    menu();
+                } catch (IOException e) {
+                    System.out.print("Exception. Shutting down");
+                    System.exit(0);
+                }
+                break;
+            case 7:
+                System.exit(0);
+            default:
+
+                throw new IllegalArgumentException("Unacceptable option.");
+
+        }
+    }
 
     public void findId() {
         System.out.println("Enter id");
         Scanner sc = new Scanner(System.in);
         String id = sc.next();
-        for (int i = 0; i < chat.size(); i++) {
-            if (id.equals(chat.get(i).getId())) {
-                System.out.println(chat.get(i).toString());
+        for (Message item : chat) {
+            if (id.equals(item.getId())) {
+                System.out.println(item.toString());
             }
         }
     }
@@ -149,11 +173,11 @@ public class Chat {
     public void findKeyword() {
         System.out.println("Enter key word");
         Scanner sc = new Scanner(System.in);
-        String k = sc.nextLine();
-        for (int i = 0; i < chat.size(); i++) {
-            if (chat.get(i).getMessage().toLowerCase().contains(k.toLowerCase()) ||
-                    chat.get(i).getAuthor().toLowerCase().contains(k.toLowerCase()) ) {
-                System.out.println(chat.get(i).toString());
+        String k = sc.nextLine().toLowerCase();
+        for (Message item : chat) {
+            if (item.getMessage().toLowerCase().contains(k) ||
+                    item.getAuthor().toLowerCase().contains(k)) {
+                System.out.println(item.toString());
             }
         }
     }
@@ -162,47 +186,63 @@ public class Chat {
         System.out.println("Enter author");
         Scanner sc = new Scanner(System.in);
         String a = sc.nextLine();
-        for (int i = 0; i < chat.size(); i++) {
-            if (chat.get(i).getAuthor().equalsIgnoreCase(a) ) {
-                System.out.println(chat.get(i).toString());
+        for (Message item : chat) {
+            if (item.getAuthor().equalsIgnoreCase(a)) {
+                System.out.println(item.toString());
             }
         }
     }
-    public void findPattern(){
+
+    public void findPattern() {
         System.out.println("Enter pattern");
         Scanner sc = new Scanner(System.in);
         String a = sc.nextLine();
         Pattern p = Pattern.compile(a);
-        for (int i = 0; i < chat.size(); i++) {
-            Matcher m = p.matcher(chat.get(i).getMessage());
-            if (m.matches() ) {
-                System.out.println(chat.get(i).toString());
+        for (Message item : chat) {
+            Matcher m = p.matcher(item.getMessage());
+            if (m.matches()) {
+                System.out.println(item.toString());
             }
         }
     }
 
-    public void findTimeWindow(){
-        System.out.println("Enter time start");
+    public void findTimeWindow() {
+        System.out.println("Enter from DD/MM/YYYY");
         Scanner sc = new Scanner(System.in);
-        long a = sc.nextLong();
-        System.out.println("Enter time end");
-        long b =sc.nextLong();
+        String fr = sc.nextLine();
+        System.out.println("Enter till DD/MM/YYYY");
+        String tl = sc.nextLine();
 
-        for (int i = 0; i < chat.size(); i++) {
-            if (a<=chat.get(i).getTimestamp() && chat.get(i).getTimestamp()<=b  ) {
-                System.out.println(chat.get(i).toString());
+        for (Message item : chat) {
+            Date d = new Date(item.getTimestamp());
+            if (checkDate(fr, tl, d)) {
+                System.out.println(item.toString());
             }
         }
     }
 
-    public void writeLog(String message) throws IOException{
-        FileWriter fw = new FileWriter("log.txt", true);
-        DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss ");
-        formatter.setTimeZone(TimeZone.getTimeZone("Europe/Minsk"));
-        Date date = new Date();
-        fw.write(formatter.format(date));
-        fw.write(message);
-        fw.close();
+    private boolean checkDate(String sFrom, String sTill, Date now) throws IllegalArgumentException {
+        Date from = makeDate(sFrom);
+        Date till = makeDate(sTill);
+
+        if (now.after(from) && now.before(till)) {
+            return true;
+        }
+        if (now.equals(from) || now.equals(till)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
+    private Date makeDate(String s) throws IllegalArgumentException {
+        int day = Integer.parseInt(s.substring(0, 2));
+        int month = Integer.parseInt(s.substring(3, 5));
+        int year = Integer.parseInt(s.substring(6, 10));
+        GregorianCalendar newGregCal = new GregorianCalendar(year, month - 1, day);
+        return new Date(newGregCal.getTimeInMillis());
+
+
+    }
 }
+
