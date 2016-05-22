@@ -3,6 +3,7 @@
 	<head>
 		<title>Simple chat</title>
 		<link rel="stylesheet" href="style.css">
+		<link rel="stylesheet" href="responsive.css">
 	</head>
 	<body>
 		<div class="header">
@@ -10,15 +11,12 @@
 				Simple chat 
 			</div>
 			<div class="loginField">
-				You're logged as
+				You're logged as&nbsp
 				<span class="loggedUser">
 					qqwik
-				</span>
-				<form>
-					  <input type="text" name="login" value="qqwik" title="type your nickname here">
-					  <br>
-					  <input type="button" value="Submit">
-				</form>
+				</span><br>
+				<button class="loggingOptions" type="button" >Change account</button>
+				<button class="loggingOptions" type="button" >Log off</button>
 			</div>
 		</div>
 		<div class="messageList">
@@ -112,6 +110,7 @@
 		</div>
 		<div class="inputField">
 			<textarea id="inputField" title='Type your message here' rows="2"></textarea>
+			<img src="warning.png" class="warning" title="cannot access the server"></img>
 			<button class="sendButton" type="button" onclick="alert('Sorry, i am not a real chat yet!')" title="Send your message">Send</button>
 		</div>
 		<script>
