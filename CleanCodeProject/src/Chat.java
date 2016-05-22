@@ -3,9 +3,12 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -84,31 +87,37 @@ public class Chat {
         System.out.println("5.View chronologically");
         System.out.println("6.Exit");
         Scanner s = new Scanner(System.in);
-        int i = Integer.parseInt((s.nextLine()));
-        switch (i) {
-            case 1:
+        try {
+            int i = Integer.parseInt((s.nextLine()));
+            switch (i) {
+                case 1:
 
-                readChat();
-                break;
-            case 2:
-                addMessage();
-                break;
-            case 3:
-                deleteMsg();
-                break;
-            case 4:
-                searchMenu();
-                break;
-            case 5:
-                sortChatChrono();
-                break;
-            case 6:
-                System.exit(0);
+                    readChat();
+                    break;
+                case 2:
+                    addMessage();
+                    break;
+                case 3:
+                    deleteMsg();
+                    break;
+                case 4:
+                    searchMenu();
+                    break;
+                case 5:
+                    sortChatChrono();
+                    break;
+                case 6:
+                    System.exit(0);
 
-            default:
+                default:
 
-                throw new IllegalArgumentException("Unacceptable option.");
+                    throw new IllegalArgumentException("Unacceptable option.");
 
+
+            }
+        }
+        catch(NumberFormatException e){
+            System.out.println("Please enter number from 1 to 6.");
         }
 
         menu();
@@ -134,7 +143,7 @@ public class Chat {
                 findAuthor();
                 break;
             case 3:
-                findKeyword();
+                findByKeyword();
                 break;
             case 4:
                 findPattern();
@@ -170,7 +179,7 @@ public class Chat {
         }
     }
 
-    public void findKeyword() {
+    public void findByKeyword() {
         System.out.println("Enter key word");
         Scanner sc = new Scanner(System.in);
         String k = sc.nextLine().toLowerCase();
@@ -243,6 +252,22 @@ public class Chat {
         return new Date(newGregCal.getTimeInMillis());
 
 
+    }
+
+    public void writeLog(String message) {
+        try {
+            FileWriter fw = new FileWriter("log.txt", true);
+            DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss ");
+            formatter.setTimeZone(TimeZone.getTimeZone("Europe/Minsk"));
+            Date date = new Date();
+
+            fw.write(formatter.format(date) + " ");
+            fw.write(message);
+            fw.close();
+        } catch (IOException e) {
+            System.out.println("Check log file.");
+            System.out.println(e.getMessage());
+        }
     }
 }
 
