@@ -2,10 +2,11 @@
 <html>
 	<head>
 		<title>Simple chat</title>
-		<link rel="stylesheet" href="style.css">
-		<link rel="stylesheet" href="responsive.css">
+		<link rel="stylesheet" href="css/style.css">
+ 		<link rel="stylesheet" href="css/responsive.css">
+		 <script src="scripts/scripts.js"></script>
 	</head>
-	<body>
+	<body onload="run();">
 		<div class="header">
 			<div class="name">
 				Simple chat 
@@ -15,27 +16,11 @@
 				<span class="loggedUser">
 					qqwik
 				</span><br>
-				<button class="loggingOptions" type="button" >Change account</button>
-				<button class="loggingOptions" type="button" >Log off</button>
+				<button class="loggingOptions" id="changenick" type="button" >Change nickname</button>
+				<button class="loggingOptions" id="logoff" type="button" >Log off</button>
 			</div>
 		</div>
 		<div class="messageList">
-			<div class="message usermessage" id="1" onmouseover="showOptions(this)" onmouseout="hideOptions(this)">
-				<span class="timestamp">
-					11:34:05
-				</span>
-				<span class="loggedUser">
-					qqwik
-				</span>
-				:
-				<span class="messageText">
-					hey
-				</span>
-				<span class="messageMark">
-				</span>
-				<img src="edit.png" class="option" id="1edi" title="edit message"></img>
-				<img src="delete.png" class="option" id="1del" title="delete message"></img>
-			</div>
 			<div class="message" id="2">
 				<span class="timestamp">
 					11:55:07
@@ -48,80 +33,11 @@
 					sup
 				</span>
 			</div>
-			<div class="message usermessage" id="3" onmouseover="showOptions(this)" onmouseout="hideOptions(this)">
-				<span class="timestamp">
-					12:00:45
-				</span>
-				<span class="loggedUser">
-					qqwik
-				</span>
-				:
-				<span class="messageText">
-					do you wanna come over this weekend? 
-				</span>
-				<span class="messageMark">
-				</span>
-				<img src="edit.png" class="option" id="3edi" title="edit message"></img>
-				<img src="delete.png" class="option" id="3del" title="delete message"></img>
-			</div>
-			<div class="message" id="4">
-				<span class="timestamp">
-					12:06:17
-				</span>
-				<span class="user">
-					spooky_ghost
-				</span>
-				:
-				<span class="messageText">
-					hey, me too?
-				</span>
-				<span class="messageMark">
-					(edited at 12:36:35)
-				</span>
-			</div>
-			<div class="message usermessage" id="5">
-				<span class="timestamp">
-					12:36:24
-				</span>
-				<span class="user">
-					qqwik
-				</span>
-				:
-				<span class="messageText">
-					 yeah im free this weekend
-				</span>
-				<span class="messageMark">
-				</span>
-			</div>
-			<div class="message" id="6">
-				<span class="timestamp">
-					12:36:29
-				</span>
-				<span class="user">
-					spooky_ghost
-				</span>
-				:
-				<span class="messageText">
-				</span>
-				<span class="messageMark">
-					(message removed)
-				</span>
-			</div>
+			
 		</div>
 		<div class="inputField">
 			<textarea id="inputField" title='Type your message here' rows="2"></textarea>
-			<img src="warning.png" class="warning" title="cannot access the server"></img>
-			<button class="sendButton" type="button" onclick="alert('Sorry, i am not a real chat yet!')" title="Send your message">Send</button>
-		</div>
-		<script>
-			function showOptions(x) {
-				document.getElementById(x.id+"del").style.display = "inline";
-				document.getElementById(x.id+"edi").style.display = "inline";
-			}
-			function hideOptions(x) {
-				document.getElementById(x.id+"del").style.display = "none";
-				document.getElementById(x.id+"edi").style.display = "none";
-			}
-		</script>
+			<img src="warning.png" class="warning" title="cannot access the server"></img><button class="cancelButton" type="button">Cancel</button><button class="sendButton" type="button" title="Send your message">Send</button></div>
+		
 	</body>
 </html>
