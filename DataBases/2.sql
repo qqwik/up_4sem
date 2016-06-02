@@ -1,0 +1,1 @@
+select text from chat.Messages where chat.Messages.user_id = 1;

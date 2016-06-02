@@ -1,0 +1,1 @@
+SELECT text FROM chat.Messages order by chat.Messages.date ASC;
