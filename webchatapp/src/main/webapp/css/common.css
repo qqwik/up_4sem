@@ -1,0 +1,134 @@
+
+.left_block, .right_block{
+    display:inline-block;
+    float:left;
+}
+
+.left_block{
+    padding: 0 20%;
+}
+
+.right_block{
+    display: inline-block;
+    margin-left:13%;
+    width: 76%;
+}
+
+.header{
+    font-family: fantasy, sans-serif;
+    font-size: 2em;
+    margin: 12% 5% auto;
+    height: auto;
+    width: 480px;
+    word-wrap: break-word;
+}
+
+
+.left_block_form_top{
+    display: block;
+    height: 59%;
+    width: 100%;
+}
+
+.new_name{
+    width: auto;
+    font-family: sans-serif;
+    font-size: 1em;
+}
+
+.username_message{
+    visibility: hidden;
+    height: 0px;
+}
+
+.left_block_buttons_edit_name{
+    display: inline-block;
+    margin-top: 10%;
+    border-radius: 0.2em;
+    font-family: sans-serif;
+    font-size: 0.8em;
+    width: 100%;
+    height: 50px;
+
+}
+
+
+.right_block_button_enter{
+    width: 28%;
+    height: 100%;
+    display: inline-block;
+    background: pink;
+    float: right;
+    font-family: sans-serif;
+    font-size: 0.8em;
+    border-radius: 3px;
+}
+
+.read-message{
+    margin-top:25%;
+    display: block;
+    width: 100%;
+    height: 410px;
+    border-radius: 3px;
+    background: white;
+    overflow: auto;
+}
+
+.message{
+    width: 100%;
+    height: auto;
+    /*resize: none;*/
+    word-wrap: break-word;
+    border: 0.05px solid grey;
+}
+
+
+.text_message{
+    width: 100%;
+    /*height: 35px;*/
+    height: auto;
+    font-family: sans-serif;
+    font-size: 0.8em;
+    resize: none;
+    font-style: italic;
+    word-wrap: break-word;
+    background: #d7d7d7;
+}
+
+
+
+.send_area{
+    margin-top: 55px;
+    height: 40px;
+}
+
+#write-message{
+    resize: none;
+    width: 70%;
+    height: 100%;
+    border-radius: 3px;
+    padding: 11px 0 0 5px;
+    font-size: 0.8em;
+}
+
+.name_creator{
+    width: 182px;
+    margin: 5% auto;
+}
+
+.message_block{
+    position: relative;
+}
+
+.label_network_fail{
+    position: absolute;
+    right: -10%;
+    top: 0%;
+    width: 30px;
+    height: 30px;
+    background: yellow;
+    border-radius: 100px;
+    border: 2px solid black;
+}
+
+

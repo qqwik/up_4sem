@@ -1,0 +1,52 @@
+
+.main{
+ height: 1080px; background: grey;
+    background-repeat: repeat-y;
+}
+
+
+h1 {
+    text-align: center;
+    font-size: 1.5em;
+    font-weight: lighter;
+}
+
+
+
+.enter_name, .enter_password{
+    display: inline-block;
+    resize: none;
+    width: 100%;
+    border-radius: 15px;
+    font-size: 1em;
+    text-align: center;
+    padding: 10px 0;
+}
+
+.button{
+    display: inline-block;
+    height: 50px;
+    width: 100%;
+    background: yellow;
+    border-radius: 15px;
+    font-family: Arial;
+    font-size: 1.3em;
+}
+
+
+
+.name_creator_start{
+
+    width: 182px;
+        margin: 5% auto;
+    padding-top: 300px;
+
+}
+
+.main-block{
+    padding: 17% 0 0 0;
+}
+
+.enter_block{
+    padding: 0 29%;
+}

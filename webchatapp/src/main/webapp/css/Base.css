@@ -1,0 +1,37 @@
+@import url("common.css");
+@import url("start.css");
+@import url("media.css");
+
+*{
+    margin: 0;
+    padding: 0;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+body{
+    font: 100%/1.5em Arial, sans-serif;
+    color: #000;
+}
+
+.container{
+    width: 90%;
+    margin: 0 auto;
+}
+
+
+/*.container: before,*/
+/*.container: after,*/
+/*.row: after,*/
+/*.row: before,*/
+/*.clear: before,*/
+/*.clear: after {*/
+    /*content: " ";*/
+    /*display: table;*/
+/*}*/
+
+/*.clear: after {*/
+    /*clear: both;*/
+/*}*/
+
