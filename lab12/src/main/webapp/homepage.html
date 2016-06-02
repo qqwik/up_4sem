@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en"> 
+    <head> 
+        <meta charset="utf-8">  
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>My Chat </title>  
+        <link type="text/css" rel="stylesheet" href="css/style.css" /> 
+        <link type="text/css" rel="stylesheet" href="css/adaptation.css" />  
+        <script src="js/scripts.js"></script>
+    </head>  
+    <body  onload="run()">
+    	<header class="header">
+            <h1 class="section-headline">Мой чат</h1>
+            <h1 id = "welcome" >Hello</h1>
+            <div class="section-inner">
+                <form id="user-form">
+                    <span id="server_state_checker_off" class="label label-danger">Offline</span>
+                </form>
+                <form id="user-form1">
+                    <span id="server_state_checker_on" class="label label-success" style="display:none">Online</span>
+                </form>
+            </div>
+        </header>
+
+	    <div class="wrapper">
+	        <!--style="display:none"-->
+	        <div class="todo-output-wrap" style="display:none">
+	            <aside class="todo-output">
+	                <pre id="output" class="todo-output-text"></pre>
+	            </aside>
+	        </div>
+
+	        <div class="todo-output-wrap" style="display:none">
+	            <aside class="todo-output">
+	                <pre id="outputm" class="todo-output-text"></pre>
+	            </aside>
+	        </div>
+	        
+
+	        <div id="menu" >
+	            <button id="btn-edit" type="button" class="my-btn marg" disabled="true">
+	                Редактировать сообщение
+	            </button>
+                <div id = "editbox">
+                    <textarea name="editmessage" id = "editmsgarea" placeholder="Введите текст изменённого сообщения " ></textarea>
+                    <button id="btn-ok" type="button" class="btn marg">ok
+                    </button>
+                </div>
+
+	            <button id="btn-del" type="button" class="my-btn marg" disabled="true">
+	                Удалить сообщение
+	            </button>
+	        </div>
+
+	        <p></p>
+	        <div class="textbox" id="textbox">
+	            <ul class="messagesList">
+	            </ul>
+	        </div>
+	        <form>
+	            <button id="logging" type="submit" class="my-button">login</button>	           
+	            <input id="userlgn" type="text" class="input-user" placeholder="Введите имя" />
+
+	            <button id="rename" type="submit" class="my-button">edit name</button>
+	            <textarea name="message" id = "msgarea" placeholder="Введите сообщение " ></textarea>
+	            <br>
+	            <button id="sendingmsg" type="submit" class="my-button">send</button>
+	        </form>
+	    </div>
+
+        <footer class="footer" >
+            <div class="footer-content">&copy Yakushev 2016</div>
+        </footer>
+
+        <div style="display:none" id="user-template">            
+            <li class="user" data-user-id="идентификатор"> <span>User</span></li>
+        </div>
+        <div style="display:none" id="user-template-me">
+            <li class="user me" data-user-id="идентификатор"> <span>User</span></li>
+        </div>
+
+        <div style="display:none" id="message-template-me">
+            <li class="message" data-massage-id="идентификатор" massage-author-id = "идентификатор автора">
+                <div class="text-style-author myText">UserName</div>
+                <h3 class="bubble-you text-style">Text </h3>
+            </li>
+        </div>
+        <div style="display:none" id="message-template">
+            <li class="message" data-massage-id="идентификатор" massage-author-id = "идентификатор автора">
+                <div class="text-style-author ">UserName</div>
+                <h3 class="bubble text-style">Text </h3>
+            </li>
+        </div>
+        <div style="display:none" id="message-template-sys">
+            <li class="message" data-massage-id="идентификатор" massage-author-id = "идентификатор автора">                
+                <h3 class="bubble-sys text-style">Text </h3>
+            </li>
+        </div>
+    </body>
+</html>

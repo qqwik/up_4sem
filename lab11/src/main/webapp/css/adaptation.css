@@ -1,0 +1,56 @@
+@media (max-width: 960px){
+    
+    .my-button-add{
+      width: 15%;
+    }  
+    .input-user{
+        width: 60%;
+    }
+    .textbox{
+        width: 90%;
+    }
+    textarea{
+        width: 91%;
+    }
+
+    .wrapper{
+        height: 74%;
+    }
+}
+
+
+
+@media (max-width: 420px) {
+   
+
+    .wrapper {
+        position: absolute;
+        width: 90%;
+        height: 74%;
+    }
+
+   .bubble {
+        width: 95%;
+    }
+
+    .bubble-you {
+        width: 95%;
+    }
+
+    .section-headline{
+        display: none;
+    }
+
+    .my-button-add {
+        width: 26%;
+    }
+
+    .textbox {
+        width: 93.5%;
+        height: 90%;
+    }
+
+    .input {
+        width: 66%;
+    }
+}
