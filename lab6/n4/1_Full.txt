@@ -1,0 +1,13 @@
+GET http://127.0.0.1:999/chat?token=TN11EN HTTP/1.1
+User-Agent: Java/1.8.0_25
+Host: 127.0.0.1:999
+Accept: text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2
+Connection: keep-alive
+
+
+HTTP/1.1 200 OK
+Date: Mon, 28 Mar 2016 15:01:15 GMT
+Access-control-allow-origin: *
+Content-length: 90
+
+{"messages":["hello","hi","how are you?","i'm fine , and you?","me too"],"token":""}

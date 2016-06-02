@@ -13,31 +13,22 @@
 			</div>
 			<div class="loginField">
 				You're logged as&nbsp
-				<span class="loggedUser">
-					qqwik
+				<span class="loggedUser usernameField">
 				</span><br>
 				<button class="loggingOptions" id="changenick" type="button" >Change nickname</button>
-				<button class="loggingOptions" id="logoff" type="button" >Log off</button>
-			</div>
-		</div>
-		<div class="messageList">
-			<div class="message" id="2">
-				<span class="timestamp">
-					11:55:07
-				</span>
-				<span class="user">
-					phalsery
-				</span>
-				:
-				<span class="messageText">
-					sup
-				</span>
+				
 			</div>
 			
 		</div>
+ 		<div class="messageList"></div>
 		<div class="inputField">
 			<textarea id="inputField" title='Type your message here' rows="2"></textarea>
 			<img src="warning.png" class="warning" title="cannot access the server"></img><button class="cancelButton" type="button">Cancel</button><button class="sendButton" type="button" title="Send your message">Send</button></div>
-		
+		<div id="messageTemplate" style="display: none">
+ 		<span class="timestamp"></span><span class="user"></span>:<span class="messageText"></span><span class="messageMark"></span>
+ 		</div>
+ 		<div id="usermessageTemplate" style="display: none">
+ 		<span class="timestamp"></span><span class="loggedUser"></span>:<span class="messageText"></span><span class="messageMark"></span><img class="option deleteOption" src="delete.png" title="delete message"><img class="option editOption" src="edit.png" title="edit message" onclick="editMessage()">
+ 		</div>
 	</body>
 </html>

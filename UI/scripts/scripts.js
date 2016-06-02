@@ -1,38 +1,91 @@
+'use strict';
+
+var messageList = [];
 var currentUser = "qqwik";
-var nextMessageId;
 var editMode = false;
 var editId;
 
 function run() {
-	nextMessageId = document.getElementsByClassName("message").length;
-	console.log(nextMessageId);
+	logAs(currentUser);
 	
-	var userMessagesContainer = document.getElementsByClassName("usermessage");
-	
-	var numOfMessages = userMessagesContainer.length;
-	for(i = 0; i < numOfMessages; i++) {
-		userMessagesContainer[i].addEventListener("mouseover", showOptions);
-		userMessagesContainer[i].addEventListener("mouseout", hideOptions);
-	}
+	messageList = loadMessages();
 	
 	var sendButton = document.getElementsByClassName("sendButton")[0];
 	sendButton.addEventListener("click", sendMessage);
 	
-	var sendButton = document.getElementsByClassName("cancelButton")[0];
+	var sendButton = document.getElementsByClassName("CancelButton")[0];
 	sendButton.addEventListener("click", onCancelButton);
 	
 	var changeNicknameButton = document.getElementById("changenick");
-	changeNicknameButton.addEventListener("click", changeNickname)
+	changeNicknameButton.addEventListener("click", changeNickname);
+	
+	render(messageList);
 }
 
-function showOptions() {
-	document.getElementById(this.id+"del").style.display = "inline";
-	document.getElementById(this.id+"edi").style.display = "inline";
+function render(listToRender) {
+	for(var i = 0; i < listToRender.length; i++) {
+		renderMessage(listToRender[i]);
+	}
 }
 
-function hideOptions() {
-	document.getElementById(this.id+"del").style.display = "none";
-	document.getElementById(this.id+"edi").style.display = "none";
+function logAs(name) {
+	var usernameField = document.getElementsByClassName("usernameField")[0];
+	usernameField.innerHTML = name;
+}
+
+function newMessage(user, messageText, mark) {
+	return {
+		timestamp: getTextTimestamp(),
+		user: user,
+		messageText: messageText,
+		messageMark: mark,
+		id: uniqueId(),
+		deleted: false
+	};
+}
+
+function renderMessage(message) {
+	var list = document.getElementsByClassName('messageList')[0];
+	
+	var element;
+	if(message.user === currentUser) {
+		if(message.messageText === "")
+			return;
+		element = elementFromTemplate(1);
+		element.addEventListener("mouseover", showOptions);
+		element.addEventListener("mouseout", hideOptions);
+		var fields = element.children;
+		fields[0].textContent = message.timestamp;
+		fields[1].textContent = message.user;
+		fields[2].textContent = message.messageText;
+		fields[3].textContent = message.messageMark;
+		fields[4].addEventListener("click", deleteMessage);
+		fields[5].addEventListener("click", editMessage);
+	}
+	else {
+		element = elementFromTemplate(0);
+		var fields = element.children;
+		fields[0].textContent = message.timestamp;
+		fields[1].textContent = message.user;
+		fields[2].textContent = message.messageText;
+		fields[3].textContent = message.messageMark;
+	}
+	element.removeAttribute("id");
+	element.removeAttribute("style");
+	element.setAttribute('data-id', message.id);
+	element.classList.add("message");
+	
+	list.appendChild(element);
+}
+
+function elementFromTemplate(cond) {
+	var template;
+	if(cond === 0)
+		template = document.getElementById("messageTemplate");
+	else
+		template = document.getElementById("usermessageTemplate");
+
+	return template.cloneNode(true);
 }
 
 function getTextTimestamp() {
@@ -49,128 +102,44 @@ function getTextTimestamp() {
 	return hours + ":" + minutes + ":" + seconds;
 }
 
-function createTimestamp() {
-	var timestamp = document.createElement("span");
-	var time = document.createTextNode(getTextTimestamp());
-	timestamp.appendChild(time);
-	var classAtt = document.createAttribute("class");
-	classAtt.value = "timestamp";
-	timestamp.setAttributeNode(classAtt);
-	
-	return timestamp;
+function uniqueId() {
+	var date = Date.now();
+	var random = Math.random() * Math.random();
+
+	return Math.floor(date * random);
 }
 
-function createUserNameMark() {
-	var userName = document.createElement("span")
-	var name = document.createTextNode(currentUser);
-	userName.appendChild(name);
-	var classAtt = document.createAttribute("class");
-	classAtt.value = "loggedUser";
-	userName.setAttributeNode(classAtt);
-	
-	return userName;
+function showOptions() {
+	var deleteButton = this.children[4];
+	deleteButton.style.display = "inline";
+	var editButton = this.children[5];
+	editButton.style.display = "inline";
 }
 
-function createMessageText() {
-	var messageText = document.createElement("span");
-	var msgText = document.createTextNode(document.getElementById("inputField").value);
-	messageText.appendChild(msgText);
-	var classAtt = document.createAttribute("class");
-	classAtt.value = "messageText";
-	messageText.setAttributeNode(classAtt);
-	
-	return messageText;
-}
-
-function createMessageMark() {
-	var messageMark = document.createElement("span")
-	var classAtt = document.createAttribute("class");
-	classAtt.value = "messageMark";
-	messageMark.setAttributeNode(classAtt);
-	
-	return messageMark;
-}
-
-function createDeleteButton() {
-	var deleteButton = document.createElement("img");
-	var classAtt = document.createAttribute("class");
-	classAtt.value = "option";
-	deleteButton.setAttributeNode(classAtt);
-	var idAtt = document.createAttribute("id");
-	idAtt.value = nextMessageId + "del";
-	deleteButton.setAttributeNode(idAtt);
-	var src = document.createAttribute("src");
-	src.value = "delete.png";
-	deleteButton.setAttributeNode(src);
-	var title = document.createAttribute("title");
-	title.value = "delete message";
-	deleteButton.setAttributeNode(title);
-	deleteButton.addEventListener("click", deleteMessage);
-	
-	return deleteButton;
-}
-
-function createEditButton() {
-	var editButton = document.createElement("img");
-	var classAtt = document.createAttribute("class");
-	classAtt.value = "option";
-	editButton.setAttributeNode(classAtt);
-	var idAtt = document.createAttribute("id");
-	idAtt.value = nextMessageId + "edi";
-	editButton.setAttributeNode(idAtt);
-	var src = document.createAttribute("src");
-	src.value = "edit.png";
-	editButton.setAttributeNode(src);
-	var title = document.createAttribute("title");
-	title.value = "edit message";
-	editButton.setAttributeNode(title);
-	editButton.addEventListener("click", editMessage);
-	
-	return editButton;
-}
-
-function createNewMessage() {
-	var newMessage = document.createElement("div");
-	var classAtt = document.createAttribute("class");
-	classAtt.value = "message usermessage";
-	newMessage.setAttributeNode(classAtt);
-	var idAtt = document.createAttribute("id");
-	idAtt.value = nextMessageId;
-	newMessage.setAttributeNode(idAtt);
-	
-	var timestamp = createTimestamp();
-	var space = document.createTextNode(" ");
-	var userName = createUserNameMark();
-	var colon = document.createTextNode(":");
-	var messageText = createMessageText();
-	var messageMark = createMessageMark();
-	var deleteButton = createDeleteButton();
-	var editButton = createEditButton();
-	
-	newMessage.appendChild(timestamp);
-	newMessage.appendChild(userName);
-	newMessage.appendChild(colon);
-	newMessage.appendChild(messageText);
-	newMessage.appendChild(messageMark);
-	newMessage.appendChild(deleteButton);
-	newMessage.appendChild(editButton);
-	
-	newMessage.addEventListener("mouseover", showOptions);
-	newMessage.addEventListener("mouseout", hideOptions);
-	
-	return newMessage;
+function hideOptions() {
+	var deleteButton = this.children[4];
+	deleteButton.style.display = "none";
+	var editButton = this.children[5];
+	editButton.style.display = "none";
 }
 
 function sendMessage() {
 	if(editMode) {
-		document.getElementById(editId).childNodes[3].innerHTML = document.getElementById("inputField").value;
-		document.getElementById(editId).childNodes[4].innerHTML = "(edited at " + getTextTimestamp() + ")";
+		var index = indexById(editId, messageList);
+		messageList[index].messageText = document.getElementById("inputField").value;
+		messageList[index].messageMark = "(edited at " + getTextTimestamp() + ")";
+		saveMessages(messageList);
+		reRender();
 	}
 	else {
-		var newMessage = createNewMessage();
-		document.getElementsByClassName("messageList")[0].appendChild(newMessage);
-		nextMessageId++;
+		var text = document.getElementById("inputField").value;
+		if(text == "")
+			return;
+		var newMsg = newMessage(currentUser, text, "");
+		messageList.push(newMsg);
+		render([newMsg]);
 	}
+	saveMessages(messageList);
 	restoreDefaults();
 }
 
@@ -181,28 +150,17 @@ function changeNickname() {
 		return;
 	}
 	currentUser = temp;
-	var usernamesContainer = document.getElementsByClassName("loggedUser");
-	var n = usernamesContainer.length;
-	for(i = 0; i < n; i++) {
-		usernamesContainer[i].innerHTML = currentUser;
+	logAs(currentUser);
+	reRender();
+}
+
+function reRender() {
+	var node = document.getElementsByClassName("messageList")[0];
+	while (node.hasChildNodes()) {
+		node.removeChild(node.lastChild);
 	}
-}
-
-function deleteMessage() {
-	var par = document.getElementsByClassName("messageList")[0];
-	var child = this.parentNode;
-	par.removeChild(child);
-	restoreDefaults();
-}
-
-function editMessage() {
-	editMode = true;
-	editId = this.parentNode.id;
-	document.getElementsByClassName("cancelButton")[0].style.display = "inline-block";
-document.getElementsByClassName("sendButton")[0].style.display = "inline-block";
-document.getElementsByClassName("sendButton")[0].style.marginLeft = "10%";
-	document.getElementsByClassName("sendButton")[0].innerHTML = "Accept";
-	document.getElementById("inputField").value = this.parentNode.childNodes[3].innerHTML;
+	
+	render(messageList);
 }
 
 function onCancelButton() {
@@ -210,10 +168,65 @@ function onCancelButton() {
 }
 
 function restoreDefaults() {
-	document.getElementsByClassName("cancelButton")[0].style.display = "none";
+	document.getElementsByClassName("CancelButton")[0].style.display = "none";
 	document.getElementsByClassName("sendButton")[0].innerHTML = "Send";
 document.getElementsByClassName("sendButton")[0].style.display = "inline";
 document.getElementsByClassName("sendButton")[0].style.marginLeft = "45%";
 	document.getElementById("inputField").value = "";
 	editMode = false;
+}
+
+function saveMessages(listToSave) {
+	if(typeof(Storage) == "undefined") {
+		alert('localStorage is not accessible');
+		return;
+	}
+
+	localStorage.setItem("Menge messageList", JSON.stringify(listToSave));
+}
+
+function loadMessages() {
+	if(typeof(Storage) == "undefined") {
+		alert('localStorage is not accessible');
+		return;
+	}
+
+	var item = localStorage.getItem("Menge messageList");
+
+	return item && JSON.parse(item);
+}
+
+function deleteMessage() {
+	var element = this.parentNode;
+	var index = indexByElement(element, messageList);
+	messageList[index] = newMessage(messageList[index].user, "", "(deleted at " + getTextTimestamp() + ")");
+	saveMessages(messageList);
+	reRender();
+	restoreDefaults();
+}
+
+function editMessage() {
+	editMode = true;
+	var element = this.parentNode;
+	editId = element.attributes['data-id'].value;
+	console.log(editId);
+	document.getElementsByClassName("cancelButton")[0].style.display = "inline-block";
+document.getElementsByClassName("sendButton")[0].style.display = "inline-block";
+document.getElementsByClassName("sendButton")[0].style.marginLeft = "10%";
+	document.getElementsByClassName("sendButton")[0].innerHTML = "Accept";
+	document.getElementById("inputField").value = this.parentNode.children[2].textContent;
+}
+
+function indexByElement(element, messages){
+	var id = element.attributes['data-id'].value;
+
+	return messages.findIndex(function(item) {
+		return item.id == id;
+	});
+}
+
+function indexById(id, messages){
+	return messages.findIndex(function(item) {
+		return item.id == id;
+	});
 }

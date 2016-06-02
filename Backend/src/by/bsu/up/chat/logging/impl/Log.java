@@ -2,10 +2,7 @@ package by.bsu.up.chat.logging.impl;
 
 import by.bsu.up.chat.logging.Logger;
 
-import java.io.FileOutputStream;
-
 public class Log implements Logger {
-
 
     private static final String TEMPLATE = "[%s] %s";
 
@@ -13,7 +10,6 @@ public class Log implements Logger {
 
     private Log(Class<?> cls) {
         tag = String.format(TEMPLATE, cls.getName(), "%s");
-
     }
 
     @Override

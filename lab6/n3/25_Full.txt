@@ -1,0 +1,18 @@
+POST http://10.150.6.213:999/chat HTTP/1.1
+User-Agent: Composer
+Pragma: no-cache
+Accept-Language: ru-RU
+Referer: http://fiddler2.com/client/4.5.1.0
+Host: 10.150.6.213:999
+Accept-Encoding: gzip, deflate
+Connection: Close
+Content-Length: 23
+
+{"message" : "goodbye"}
+HTTP/1.1 200 OK
+Date: Mon, 28 Mar 2016 10:31:59 GMT
+Transfer-encoding: chunked
+Access-control-allow-origin: *
+
+0
+

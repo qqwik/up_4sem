@@ -1,9 +1,10 @@
 package by.bsu.up.chat.client;
 
 import by.bsu.up.chat.Constants;
+
+import by.bsu.up.chat.logging.impl.MyLogging;
 import by.bsu.up.chat.logging.Logger;
 import by.bsu.up.chat.logging.impl.Log;
-import by.bsu.up.chat.logging.impl.FileLogger;
 import by.bsu.up.chat.utils.MessageHelper;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -18,9 +19,9 @@ import java.util.Scanner;
 public class Client {
 
     public static final long POLLING_PERIOD_MILLIS = 1000L;
+    public static final Logger CLIENTLOG = new MyLogging("clientlog.txt");
 
     private static final Logger logger = Log.create(Client.class);
-    private static final Logger clientLogger = new FileLogger("clientlogger.txt");
 
     private List<String> localHistory = new ArrayList<String>();
 
@@ -41,7 +42,7 @@ public class Client {
         URL url = null;
         try {
             url = new URL(Constants.PROTOCOL, host, port, Constants.CONTEXT_PATH);
-            url.openConnection();
+            url.openConnection();   //try connect to server
             connected = true;
             startListening();
             startMessageSending();
@@ -70,10 +71,13 @@ public class Client {
 
     public void disconnect() {
 
+        // Thread#stop method is deprecated. The listeners threads stops when
+        // finish it's runnable action.
         connected = false;
     }
 
     private void startListening() {
+        // if listener thread is alive and listening now, no need to recreate. Just reuse it.
         if (listenerThread != null && listenerThread.isAlive()) {
             return;
         }
@@ -124,46 +128,48 @@ public class Client {
     }
 
     public List<String> getMessages() {
-        clientLogger.info("Began receiving messages");
         checkConnected();
         List<String> list = new ArrayList<>();
         HttpURLConnection incomeConnection = null;
         try {
-
-            clientLogger.info("Send request for receiving messages");
+            CLIENTLOG.info("send request for receive messages");
             String query = String.format("%s?%s=%s", Constants.CONTEXT_PATH, Constants.REQUEST_PARAM_TOKEN, MessageHelper.buildToken(localHistory.size()));
             URL url = new URL(Constants.PROTOCOL, host, port, query);
             incomeConnection = prepareInputConnection(url);
-
-            clientLogger.info("Response is received");
+            CLIENTLOG.info("response is received");
             String response = MessageHelper.inputStreamToString(incomeConnection.getInputStream());
             JSONObject jsonObject = MessageHelper.stringToJsonObject(response);
             JSONArray jsonArray = (JSONArray) jsonObject.get("messages");
-            clientLogger.info("Received " + jsonArray.size() + " messages");
+            CLIENTLOG.info("received " + jsonArray.size() + " messages");
             for (Object o : jsonArray) {
                 logger.info(String.format("Message from server: %s", o));
-                clientLogger.info(String.format("Message from server: %s", o));
+                CLIENTLOG.info("message from server: " + o);
                 list.add(o.toString());
             }
 
 
+            /**
+             * Here is an example how for cycle can be replaced with Java 8 Stream API
+             */
+            // jsonArray.forEach(System.out::println);
+            // list = (List<String>) jsonArray.stream().map(Object::toString).collect(Collectors.toList());
+
         } catch (ParseException e) {
             logger.error("Could not parse message", e);
-            clientLogger.error("Could not parse message", e);
+            CLIENTLOG.error("could not parse message", e);
         } catch (ConnectException e) {
             logger.error("Connection error. Disconnecting...", e);
-            clientLogger.error("Connection error. Disconnecting...", e);
+            CLIENTLOG.error("connection error", e);
             disconnect();
         } catch (IOException e) {
             logger.error("IOException occured while reading input message", e);
-            clientLogger.error("IOException occured while reading input message", e);
+            CLIENTLOG.error("IOException occured while reading input message", e);
         } finally {
             if (incomeConnection != null) {
                 incomeConnection.disconnect();
             }
         }
-
-        clientLogger.info("End of receiving messages");
+        CLIENTLOG.info("stop receiving messages");
         return list;
     }
 
@@ -171,26 +177,25 @@ public class Client {
         checkConnected();
         HttpURLConnection outcomeConnection = null;
         try {
-            clientLogger.info("Start sending message \"" + message + "\"");
+            CLIENTLOG.info("start sending message \"" + message + "\"");
             outcomeConnection = prepareOutputConnection();
             byte[] buffer = MessageHelper.buildSendMessageRequestBody(message).getBytes();
             OutputStream outputStream = outcomeConnection.getOutputStream();
             outputStream.write(buffer, 0, buffer.length);
             outputStream.close();
-            outcomeConnection.getInputStream();
-            clientLogger.info("Message sent");
+            outcomeConnection.getInputStream(); //to send data to server
+            CLIENTLOG.info("message sent");
         } catch (ConnectException e) {
             logger.error("Connection error. Disconnecting...", e);
-            clientLogger.error("Connection error. Disconnecting...", e);
+            CLIENTLOG.error("connection error", e);
             disconnect();
         } catch (IOException e) {
             logger.error("IOException occurred while sending message", e);
-            clientLogger.error("IOException occurred while sending message", e);
         } finally {
             if (outcomeConnection != null) {
                 outcomeConnection.disconnect();
             }
-            clientLogger.info("Stop sending message \"" + message + "\"");
+            CLIENTLOG.info("stop sending message \"" + message + "\"");
         }
     }
 }
